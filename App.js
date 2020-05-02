@@ -4,6 +4,7 @@ import Button from "./Button.js";
 import Radio from "./Radio.js";
 import axios from "axios";
 import RecipeCard from "./RecipeCard.js";
+import API from "./API.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class App extends React.Component {
       genderSelectedOption: "",
       unitSelectedOption: "",
       bmi: 0,
-      meal: {},
+      meal: [],
     };
 
     //Binding Handlers
@@ -68,7 +69,25 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    fetch("https://www.themealdb.com/api/json/v1/1/latest.php").then(
+    axios
+      .get("https://www.themealdb.com/api/json/v1/1/search.php?f=b")
+      .then(function (response) {
+        // handle success
+        const meal = response.json();
+        if (typeof meal === "object") {
+          this.setState({ meal });
+        }
+        console.log(response.json);
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+      .then(function () {});
+  }
+
+  handleSubmit(event) {
+    fetch("https://www.themealdb.com/api/json/v1/1/search.php?f=b").then(
       (response) => {
         const meal = response.json();
         if (typeof meal === "object") {
@@ -76,14 +95,6 @@ class App extends React.Component {
         }
       }
     );
-  }
-
-  handleSubmit(event) {
-    //Kayne Rest API fun
-    fetch(
-      "https://world.openfoodfacts.org/api/v0/product/737628064502.json"
-    ).then((response) => response.json());
-
     //Printing the state values
     alert(
       "A name was submitted: " +
@@ -95,7 +106,9 @@ class App extends React.Component {
         "\nA height was submitted: " +
         this.state.height +
         "\nA Gender was submitted: " +
-        this.state.genderSelectedOption
+        this.state.genderSelectedOption +
+        "\nA meal for you!" +
+        this.state.meal
     );
     event.preventDefault();
   }
@@ -162,12 +175,13 @@ class App extends React.Component {
   //Rendering the App:
 
   render() {
-    var data = this.state.meal;
     return (
       <div>
         <h1>Welcome to the Fitness and Calorie Tracker!</h1>
 
-        <div>{data.length > 0 && <RecipeCard meals={data} />}</div>
+        <div>
+          {this.state.meal.length > 0 && <RecipeCard meal={this.state.meal} />}
+        </div>
 
         <form onSubmit={this.handleSubmit}>
           <label>
@@ -261,12 +275,13 @@ class App extends React.Component {
         <br />
 
         <label>
-          BMI:
+          Body Mass Index:
           <input
             type="button"
-            onChange={this.calculateBMI()}
-            value={this.calculateBMI()}
+            onChange={(this.calculateBMI(), this.calculateBMICategory())}
+            value={this.state.bmi}
           />
+          <p>You are {this.state.bmiCategory}</p>
         </label>
 
         <label>
@@ -277,6 +292,8 @@ class App extends React.Component {
             value={this.calculateRMR()}
           />
         </label>
+
+        <API />
       </div>
     );
   }
