@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import Title from "./Title";
 import Image from "./Image";
-export default class RecipeCard extends Component {
+class RecipeCard extends React.Component {
   render() {
     return (
       <div>
-        {this.props.meals.map((item, index) => {
+        {this.props.meal.map((item, index) => {
           return (
             <a key={index} href={item.strSource}>
               <Image source={item.strMealThumb} text={item.strMeal} />
@@ -17,3 +17,4 @@ export default class RecipeCard extends Component {
     );
   }
 }
+export default RecipeCard;
