@@ -1,6 +1,7 @@
-import React, { Component } from "react";
-export default class Title extends Component {
+import React from "react";
+class Title extends React.Component {
   render() {
-    return <h2>{this.props.title}</h2>;
+    return <h1>{this.props.title}</h1>;
   }
 }
+export default Title;
