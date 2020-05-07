@@ -6,3 +6,8 @@ body {
   padding: 40px;
   font-family: Arial;
 }
+
+input[type="text"] {
+  width: 32px;
+  height: 16px;
+}
