@@ -2,9 +2,7 @@ import React from "react";
 import "./App.css";
 import Button from "./Button.js";
 import Radio from "./Radio.js";
-import axios from "axios";
-import RecipeCard from "./RecipeCard.js";
-import API from "./API.js";
+import "./RecipeCard";
 
 class App extends React.Component {
   constructor(props) {
@@ -17,7 +15,7 @@ class App extends React.Component {
       genderSelectedOption: "",
       unitSelectedOption: "",
       bmi: 0,
-      meal: [],
+      meals: [],
     };
 
     //Binding Handlers
@@ -68,25 +66,8 @@ class App extends React.Component {
     this.setState = this.calculateBMI();
   }
 
-  componentWillMount() {
-    axios
-      .get("https://www.themealdb.com/api/json/v1/1/search.php?f=b")
-      .then(function (response) {
-        // handle success
-        const meal = response.json();
-        if (typeof meal === "object") {
-          this.setState({ meal });
-        }
-        console.log(response.json);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function () {});
-  }
-
-  handleSubmit(event) {
+  /*
+handleSubmit(event) {
     fetch("https://www.themealdb.com/api/json/v1/1/search.php?f=b").then(
       (response) => {
         const meal = response.json();
@@ -112,6 +93,38 @@ class App extends React.Component {
     );
     event.preventDefault();
   }
+  */
+
+  handleSubmit(event) {
+    console.log("about to fetch");
+    // var meal;  <- we no longer need this global variable
+
+    fetch("https://www.themealdb.com/api/json/v1/1/search.php?f=a")
+      .then((response) => {
+        return response.json(); // create json
+      })
+      .then((data) => {
+        // wait for json to be created. The json object will be passed to parameter "meal"
+
+        // now data is a defined object. Defined by the json return from the fetch call
+
+        if (typeof data === "object") {
+          console.log({ data });
+        }
+
+        //Printing the state values
+        console.log("\nA data for you! " + data);
+
+        // we can use data like an object. The properties come from the json.
+        // Go to https://www.themealdb.com/api/json/v1/1/search.php?f=b in a browser to see all of the properties
+
+        // For example
+
+        console.log("\ndata.meals: " + data.meals[1].strMeal);
+      });
+
+    console.log("done with fetch");
+  }
 
   handleClear() {
     this.setState({ name: "" });
@@ -124,7 +137,7 @@ class App extends React.Component {
 
   //Calculating functions:
   calculateBMI() {
-    if (this.state.unitSelectedOption == "Standard")
+    if (this.state.unitSelectedOption === "Standard")
       this.state.bmi =
         703 * (this.state.weight / Math.pow(this.state.height, 2));
     //Metric
@@ -144,8 +157,8 @@ class App extends React.Component {
   }
 
   calculateRMR() {
-    if (this.state.unitSelectedOption == "Standard")
-      if (this.state.genderSelectedOption == "Male")
+    if (this.state.unitSelectedOption === "Standard")
+      if (this.state.genderSelectedOption === "Male")
         return (
           9.99 * (this.state.weight * 0.453592) +
           6.25 * (this.state.height * 0.0254 * 100) -
@@ -158,7 +171,7 @@ class App extends React.Component {
           (4.92 * this.state.age + 161)
         );
     //Metric
-    else if (this.state.genderSelectedOption == "Male")
+    else if (this.state.genderSelectedOption === "Male")
       return (
         9.99 * this.state.weight +
         6.25 * (this.state.height * 100) -
@@ -179,50 +192,47 @@ class App extends React.Component {
       <div>
         <h1>Welcome to the Fitness and Calorie Tracker!</h1>
 
-        <div>
-          {this.state.meal.length > 0 && <RecipeCard meal={this.state.meal} />}
-        </div>
-
         <form onSubmit={this.handleSubmit}>
-          <label>
-            Name:
-            <input
-              type="text"
-              value={this.state.name}
-              onChange={this.handleNameChange}
-            />
-            <br />
-          </label>
+          <table>
+            <label>
+              Name:
+              <input
+                type="text"
+                value={this.state.name}
+                onChange={this.handleNameChange}
+              />
+              <br />
+            </label>
 
-          <label>
-            Age:
-            <input
-              type="text"
-              value={this.state.age}
-              onChange={this.handleAgeChange}
-            />
-            <br />
-          </label>
+            <label>
+              Age:
+              <input
+                type="text"
+                value={this.state.age}
+                onChange={this.handleAgeChange}
+              />
+              <br />
+            </label>
 
-          <label>
-            Weight (Pounds / KiloGrams):
-            <input
-              type="text"
-              value={this.state.weight}
-              onChange={this.handleWeightChange}
-            />
-            <br />
-          </label>
+            <label>
+              Weight (Pounds / KiloGrams):
+              <input
+                type="text"
+                value={this.state.weight}
+                onChange={this.handleWeightChange}
+              />
+              <br />
+            </label>
 
-          <label>
-            Height (Inches / Meters):
-            <input
-              type="text"
-              value={this.state.height}
-              onChange={this.handleHeightChange}
-            />
-          </label>
-
+            <label>
+              Height (Inches / Meters):
+              <input
+                type="text"
+                value={this.state.height}
+                onChange={this.handleHeightChange}
+              />
+            </label>
+          </table>
           <div>
             <Radio
               value="Male"
@@ -292,8 +302,6 @@ class App extends React.Component {
             value={this.calculateRMR()}
           />
         </label>
-
-        <API />
       </div>
     );
   }
