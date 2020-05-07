@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import Button from "./Button.js";
 import Radio from "./Radio.js";
-import "./RecipeCard";
+
 
 class App extends React.Component {
   constructor(props) {
