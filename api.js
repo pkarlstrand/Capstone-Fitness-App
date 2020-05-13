@@ -11,7 +11,7 @@ class Api extends React.Component {
 
   componentDidMount() {
     axios
-      .get(`https://www.themealdb.com/api/json/v1/1/search.php?f=d`)
+      .get(`https://www.themealdb.com/api/json/v1/1/random.php`)
       .then((res) => {
         const apiData = res.data;
         this.setState({ apiData });
