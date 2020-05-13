@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import Button from "./Button.js";
 import Radio from "./Radio.js";
-
+import Api from "./api.js";
 
 class App extends React.Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class App extends React.Component {
       genderSelectedOption: "",
       unitSelectedOption: "",
       bmi: 0,
-      meals: [],
+      meals: "",
     };
 
     //Binding Handlers
@@ -66,16 +66,17 @@ class App extends React.Component {
     this.setState = this.calculateBMI();
   }
 
-  /*
-handleSubmit(event) {
-    fetch("https://www.themealdb.com/api/json/v1/1/search.php?f=b").then(
-      (response) => {
-        const meal = response.json();
-        if (typeof meal === "object") {
-          this.setState({ meal });
+  handleSubmit(event) {
+    fetch("https://www.themealdb.com/api/json/v1/1/search.php?f=a")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (typeof data === "object") {
+          //console.log({ data });
+          this.setState({ meals: data.meals[1].strSource });
         }
-      }
-    );
+      });
     //Printing the state values
     alert(
       "A name was submitted: " +
@@ -88,13 +89,14 @@ handleSubmit(event) {
         this.state.height +
         "\nA Gender was submitted: " +
         this.state.genderSelectedOption +
-        "\nA meal for you!" +
-        this.state.meal
+        "\nHere's a meal we think you'll enjoy! If there's nothing here, hit the submit again.\n" +
+        "Recipe: " +
+        this.state.meals
     );
     event.preventDefault();
   }
-  */
 
+  /*
   handleSubmit(event) {
     console.log("about to fetch");
     // var meal;  <- we no longer need this global variable
@@ -120,12 +122,13 @@ handleSubmit(event) {
 
         // For example
 
-        console.log("\ndata.meals: " + data.meals[1].strMeal);
+        this.setState({ meals: data.meals[1].strMeal });
+        //console.log("\ndata.meals: " + data.meals[1].strMeal);
       });
 
     console.log("done with fetch");
   }
-
+*/
   handleClear() {
     this.setState({ name: "" });
     this.setState({ age: "" });
@@ -190,8 +193,11 @@ handleSubmit(event) {
   render() {
     return (
       <div>
-        <h1>Welcome to the Fitness and Calorie Tracker!</h1>
-
+        <h1>Welcome to the Health and Fitness Calculator!</h1>
+        <p>
+          Please enter some information about yourself to find out your BMI and
+          more.
+        </p>
         <form onSubmit={this.handleSubmit}>
           <table>
             <label>
@@ -302,6 +308,15 @@ handleSubmit(event) {
             value={this.calculateRMR()}
           />
         </label>
+        <br></br>
+        <br></br>
+        <label>
+          <br></br>
+          <br></br>
+          Here are some previews of meals we think you'd enjoy. Follow the link
+          to get the full recipe!
+        </label>
+        <Api />
       </div>
     );
   }
