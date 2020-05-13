@@ -67,14 +67,16 @@ class App extends React.Component {
   }
 
   handleSubmit(event) {
-    fetch("https://www.themealdb.com/api/json/v1/1/search.php?f=a")
+    fetch("https://www.themealdb.com/api/json/v1/1/random.php")
       .then((response) => {
         return response.json();
       })
       .then((data) => {
         if (typeof data === "object") {
           //console.log({ data });
-          this.setState({ meals: data.meals[1].strSource });
+          this.setState({
+            meals: data.meals[0].strMeal + "\n" + data.meals[0].strSource,
+          });
         }
       });
     //Printing the state values
@@ -89,7 +91,7 @@ class App extends React.Component {
         this.state.height +
         "\nA Gender was submitted: " +
         this.state.genderSelectedOption +
-        "\nHere's a meal we think you'll enjoy! If there's nothing here, hit the submit again.\n" +
+        "\nHere's a meal we think you'll enjoy! If there's nothing here, hit the submit button again.\n" +
         "Recipe: " +
         this.state.meals
     );
