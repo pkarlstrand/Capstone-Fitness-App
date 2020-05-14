@@ -98,39 +98,7 @@ class App extends React.Component {
     event.preventDefault();
   }
 
-  /*
-  handleSubmit(event) {
-    console.log("about to fetch");
-    // var meal;  <- we no longer need this global variable
-
-    fetch("https://www.themealdb.com/api/json/v1/1/search.php?f=a")
-      .then((response) => {
-        return response.json(); // create json
-      })
-      .then((data) => {
-        // wait for json to be created. The json object will be passed to parameter "meal"
-
-        // now data is a defined object. Defined by the json return from the fetch call
-
-        if (typeof data === "object") {
-          console.log({ data });
-        }
-
-        //Printing the state values
-        console.log("\nA data for you! " + data);
-
-        // we can use data like an object. The properties come from the json.
-        // Go to https://www.themealdb.com/api/json/v1/1/search.php?f=b in a browser to see all of the properties
-
-        // For example
-
-        this.setState({ meals: data.meals[1].strMeal });
-        //console.log("\ndata.meals: " + data.meals[1].strMeal);
-      });
-
-    console.log("done with fetch");
-  }
-*/
+  
   handleClear() {
     this.setState({ name: "" });
     this.setState({ age: "" });
