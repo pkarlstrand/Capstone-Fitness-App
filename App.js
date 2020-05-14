@@ -80,7 +80,8 @@ class App extends React.Component {
         }
       });
     //Printing the state values
-    alert(
+
+    window.alert(
       "A name was submitted: " +
         this.state.name +
         "\nA age was submitted: " +
@@ -98,7 +99,6 @@ class App extends React.Component {
     event.preventDefault();
   }
 
-  
   handleClear() {
     this.setState({ name: "" });
     this.setState({ age: "" });
